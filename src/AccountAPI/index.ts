@@ -6,6 +6,7 @@ import {
   LogoutQuery,
   TwoFactorViewModel,
 } from './types.js';
+
 export class AccountAPI {
   private apiService: ApiService;
   constructor(apiService: ApiService) {
