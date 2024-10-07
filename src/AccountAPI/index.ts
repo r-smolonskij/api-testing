@@ -108,20 +108,22 @@ export class AccountAPI {
     }
   };
 
-  createDevice = async (body: CreateDeviceModel) => {
+  createDevice = async (
+    body: CreateDeviceModel
+  ): Promise<DataModel<'Device'>> => {
     try {
-      const data = {
+      const bodyData = {
         type: body.deviceType ?? DeviceType.iOS,
         userID: body.userId,
         id: body.fcmToken,
       };
-      const result = await this.apiService
+      const { data } = await this.apiService
         .getOpenApiClient()
         .POST('/api/Devices', {
-          body: data,
+          body: bodyData,
         });
 
-      return result.data;
+      return data;
     } catch (error) {
       console.error('Error creating device:', error);
       return error;
