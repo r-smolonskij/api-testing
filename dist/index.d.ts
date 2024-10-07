@@ -19923,6 +19923,23 @@ declare class ApiService {
 type DataModel<T> = components['schemas'][T &
   keyof components['schemas']];
 
+declare enum DeviceType {
+    /** Old IOS app */
+    _old_IOS = 0,
+    /** Old Android app */
+    _old_Android = 1,//
+    /** Old desktop app */
+    CWS = 2,
+    CoAlertiOS = 3,
+    CoAlertAndroid = 4,
+    /** IOS app >3.0 */
+    iOS = 5,
+    /** Android app >3.0 */
+    Android = 6,
+    /** Desktop app */
+    DesktopApp = 7
+}
+
 interface LoginByEmailAndPasswordModel {
     email: string;
     password: string;
@@ -19936,8 +19953,13 @@ interface LoginAdminByEmailAndPasswordModel {
 interface LogoutQuery {
     deviceId?: string;
 }
+interface CreateDeviceModel {
+    userId: number;
+    fcmToken: string;
+    /** @default 'DeviceType.iOS' */
+    deviceType?: DeviceType;
+}
 
-type GetUserInfoResponse = DataModel<'UserInfoViewModel'>;
 declare class AccountAPI {
     private apiService;
     constructor(apiService: ApiService);
@@ -19946,7 +19968,8 @@ declare class AccountAPI {
     getAntiForgeryToken: () => Promise<any>;
     loginByEmailAndPassword: (body: LoginByEmailAndPasswordModel) => Promise<DataModel<"UserInfoViewModel">>;
     loginAdminByEmailAndPassword: (body: LoginAdminByEmailAndPasswordModel) => Promise<DataModel<"UserInfoViewModel">>;
-    getUserInfo: () => Promise<GetUserInfoResponse>;
+    getUserInfo: () => Promise<DataModel<"UserInfoViewModel">>;
+    createDevice: (body: CreateDeviceModel) => Promise<DataModel<"Device">>;
     logout: (query?: LogoutQuery) => Promise<any>;
 }
 
