@@ -216,6 +216,22 @@ var AccountAPI = class {
         return error;
       }
     };
+    this.createDevice = async (body) => {
+      try {
+        const bodyData = {
+          type: body.deviceType ?? 5 /* iOS */,
+          userID: body.userId,
+          id: body.fcmToken
+        };
+        const { data } = await this.apiService.getOpenApiClient().POST("/api/Devices", {
+          body: bodyData
+        });
+        return data;
+      } catch (error) {
+        console.error("Error creating device:", error);
+        return error;
+      }
+    };
     this.logout = async (query) => {
       try {
         await this.apiService.getOpenApiClient().POST("/api/Account/Logout", {
