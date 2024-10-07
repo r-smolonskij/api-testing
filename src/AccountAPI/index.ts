@@ -1,6 +1,8 @@
 import { ApiService } from '../ApiService/index.js';
+import { DeviceType } from '../common/common.types.js';
 import { DataModel, PathParameters, QueryParameters } from '../types.js';
 import {
+  CreateDeviceModel,
   LoginAdminByEmailAndPasswordModel,
   LoginByEmailAndPasswordModel,
   LogoutQuery,
@@ -101,6 +103,26 @@ export class AccountAPI {
       return data;
     } catch (error) {
       console.error('Error getting user info:', error);
+      return error;
+    }
+  };
+
+  createDevice = async (body: CreateDeviceModel) => {
+    try {
+      const data = {
+        type: body.deviceType ?? DeviceType.iOS,
+        userID: body.userId,
+        id: body.fcmToken,
+      };
+      const result = await this.apiService
+        .getOpenApiClient()
+        .POST('/api/Devices', {
+          body: data,
+        });
+
+      return result.data;
+    } catch (error) {
+      console.error('Error creating device:', error);
       return error;
     }
   };
