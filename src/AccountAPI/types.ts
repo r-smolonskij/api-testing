@@ -1,3 +1,5 @@
+import { DeviceType } from '../common/common.types';
+
 export interface LoginByEmailAndPasswordModel {
   email: string;
   password: string;
@@ -20,4 +22,11 @@ export interface TwoFactorViewModel {
   token: string;
   email: string;
   code: string;
+}
+
+export interface CreateDeviceModel {
+  userId: number;
+  fcmToken: string;
+  /** @default 'DeviceType.iOS' */
+  deviceType?: DeviceType;
 }
