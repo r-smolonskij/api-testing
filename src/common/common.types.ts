@@ -14,3 +14,8 @@ export enum DeviceType {
   /** Desktop app */
   DesktopApp = 7,
 }
+
+export type AudioFile = {
+  fileName: string;
+  duration: number;
+};

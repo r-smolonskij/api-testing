@@ -20254,4 +20254,114 @@ declare class AlarmsAPI {
     deleteMultipleEmergencyTypes: (emergencyTypesIds: number[]) => Promise<any>;
 }
 
-export { AccountAPI, AlarmsAPI, ApiService, GroupsAPI, LocationsAPI, OrganizationsAPI, UsersAPI };
+declare enum MessageType {
+    Message = 0,
+    Report = 1,
+    Emergency = 2,
+    Broadcast = 3,
+    GroupAdditionNormal = 4,
+    GroupAdditionEmergency = 5,
+    SituationReport = 6,
+    _old_ChecklistStart = 7,
+    _old_ChecklistShare = 8,
+    HoldingStatement = 9,
+    LogNote = 10,
+    CrossOrganizationEmergency = 11,
+    Forwarded = 12
+}
+declare enum ReplyType {
+    All = 0,
+    SenderOnly = 1,
+    None = 2
+}
+declare enum ReplyPurpose {
+    Regular = 0,
+    EndCrisis = 1,
+    BlockComments = 2,
+    UnblockComments = 3,
+    ChecklistEnded = 4,
+    ChecklistReactivated = 5
+}
+declare enum MessageAttachmentFileType {
+    Document = 0,
+    Photo = 1,
+    Audio = 2
+}
+
+interface GetMessagesQuery {
+    search: string;
+    skip: number;
+    take: number;
+    recalled: boolean;
+    threshold: string;
+    types: number[];
+    excludeTypes: number[];
+    groups: number[];
+}
+interface GetMessageQuery {
+    /** @default 'false' */
+    noCache?: boolean;
+    /** @default 'true' */
+    includeReplies?: boolean;
+    replyPurpose?: ReplyPurpose[];
+}
+interface SendMessageModel {
+    type: MessageType;
+    replyType?: ReplyType;
+    subType?: number;
+    groupID?: number;
+    groupIDs?: number[];
+    recipientIDs?: number[];
+    locationID?: number;
+    senderLatitude?: number;
+    senderLongitude?: number;
+    ChecklistID?: number;
+    emergencyTypeId?: number;
+    situationReportID?: number;
+    musterId?: number;
+    onCallAlertId?: number;
+    ceaseNotification?: boolean;
+    subOrganisationIDForEmergencyMessage?: number;
+    text?: string;
+    photoFileName?: string;
+    documentFileName?: string;
+    photoFileNames?: string[];
+    documentFileNames?: string[];
+    audioFileNames?: string[];
+    groupDocumentIds?: number[];
+    subject?: string;
+    attachments?: MessageAttachment[];
+}
+type MessageAttachment = {
+    fileName?: string;
+    type?: MessageAttachmentFileType;
+    size?: number;
+};
+interface SendReplyModel {
+    text?: string;
+    replyId?: number;
+    ChecklistID?: number;
+    photoFileNames?: string[];
+    documentFileNames?: string[];
+    audioFileNames?: string[];
+    attachments?: MessageAttachment[];
+    locationID?: number;
+    groupDocumentIds?: number[];
+    ceaseNotification?: boolean;
+    replyToInitialMessage?: boolean;
+    replyPurpose?: ReplyPurpose;
+}
+
+declare class MessagesAPI {
+    private apiService;
+    constructor(apiService: ApiService);
+    setApiService(apiService: ApiService): void;
+    getApiService: () => ApiService;
+    getMessages: (query?: GetMessagesQuery) => Promise<any>;
+    sendMessage: (body: SendMessageModel) => Promise<any>;
+    getMessage: (id: number, query?: GetMessageQuery) => Promise<any>;
+    sendReply: (messageId: number, body: SendReplyModel) => Promise<any>;
+    getMessageRecipients: (messageId: number) => Promise<any>;
+}
+
+export { AccountAPI, AlarmsAPI, ApiService, GroupsAPI, LocationsAPI, MessagesAPI, OrganizationsAPI, UsersAPI };

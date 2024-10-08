@@ -34,6 +34,7 @@ __export(src_exports, {
   ApiService: () => ApiService,
   GroupsAPI: () => GroupsAPI,
   LocationsAPI: () => LocationsAPI,
+  MessagesAPI: () => MessagesAPI,
   OrganizationsAPI: () => OrganizationsAPI,
   UsersAPI: () => UsersAPI
 });
@@ -715,6 +716,74 @@ var OrganizationsAPI = class {
     this.apiService = apiService;
   }
 };
+
+// src/MessagesAPI/index.ts
+var MessagesAPI = class {
+  constructor(apiService) {
+    this.getApiService = () => {
+      return this.apiService;
+    };
+    this.getMessages = async (query) => {
+      try {
+        const { data } = await this.apiService.getOpenApiClient().GET("/api/Messages", { params: { query } });
+        return data;
+      } catch (error) {
+        console.error("Error fetching messages:", error);
+        return error;
+      }
+    };
+    this.sendMessage = async (body) => {
+      try {
+        const { data } = await this.apiService.getOpenApiClient().POST("/api/Messages", { body });
+        return data;
+      } catch (error) {
+        console.error("Error sending a message:", error);
+        return error;
+      }
+    };
+    this.getMessage = async (id, query) => {
+      try {
+        const { data } = await this.apiService.getOpenApiClient().GET("/api/Messages/{id}", {
+          params: {
+            path: { id },
+            query
+          }
+        });
+        return data;
+      } catch (error) {
+        console.error("Error fetching message:", error);
+        return error;
+      }
+    };
+    this.sendReply = async (messageId, body) => {
+      try {
+        const { data } = await this.apiService.getOpenApiClient().POST("/api/Messages/{messageID}/reply", {
+          params: { path: { messageID: messageId } },
+          body
+        });
+        return data;
+      } catch (error) {
+        console.error("Error sending a reply:", error);
+        return error;
+      }
+    };
+    this.getMessageRecipients = async (messageId) => {
+      try {
+        const { data } = await this.apiService.getOpenApiClient().GET("/api/Messages/{messageID}/recipients", {
+          params: { path: { messageID: messageId } }
+        });
+        return data;
+      } catch (error) {
+        console.error("Error fetching message recipients:", error);
+        return error;
+      }
+    };
+    this.apiService = apiService;
+  }
+  setApiService(apiService) {
+    this.apiService = apiService;
+  }
+};
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   AccountAPI,
@@ -722,6 +791,7 @@ var OrganizationsAPI = class {
   ApiService,
   GroupsAPI,
   LocationsAPI,
+  MessagesAPI,
   OrganizationsAPI,
   UsersAPI
 });

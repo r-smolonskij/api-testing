@@ -5,3 +5,4 @@ export { LocationsAPI } from './LocationsAPI/index.js';
 export { OrganizationsAPI } from './OrganizationsAPI/index.js';
 export { UsersAPI } from './UsersAPI/index.js';
 export { AlarmsAPI } from './AlarmsAPI/index.js';
+export { MessagesAPI } from './MessagesAPI/index.js';
